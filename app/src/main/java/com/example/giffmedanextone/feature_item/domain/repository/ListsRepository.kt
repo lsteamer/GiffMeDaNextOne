@@ -1,19 +1,13 @@
-package com.example.giffmedanextone.feature_item.data.data_source
+package com.example.giffmedanextone.feature_item.domain.repository
 
-import androidx.room.*
 import com.example.giffmedanextone.feature_item.domain.model.SingleList
 import kotlinx.coroutines.flow.Flow
 
+interface ListsRepository {
 
-@Dao
-interface ListsDao {
-
-    @Query("SELECT * FROM singlelist")
     fun getLists() : Flow<List<SingleList>>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertList(list: SingleList)
 
-    @Delete
     suspend fun deleteList(list: SingleList)
 }
