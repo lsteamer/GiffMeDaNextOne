@@ -12,6 +12,8 @@ data class SingleList(
     val bareList: List<String>,
     val accumulatingList: List<String>,
     val color: Int,
+    val timeCreated: Long,
+    val timeLastAccessed: Long,
     @PrimaryKey val id: Int? = null
 ){
     companion object{
