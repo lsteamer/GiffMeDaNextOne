@@ -9,6 +9,10 @@ import com.example.giffmedanextone.feature_item.domain.model.SingleList
     version = 1
 )
 
-abstract class ListDataBase : RoomDatabase() {
+abstract class ListsDataBase : RoomDatabase() {
     abstract val listsDao : ListsDao
+
+    companion object {
+        const val DATABASE_NAME = "lists_db"
+    }
 }
