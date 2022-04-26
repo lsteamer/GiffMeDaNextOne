@@ -1,10 +1,11 @@
-package com.example.giffmedanextone
+package com.example.giffmedanextone.di
 
 import android.app.Application
 import androidx.room.Room
 import com.example.giffmedanextone.feature_item.data.data_source.ListsDataBase
 import com.example.giffmedanextone.feature_item.data.repository.ListsRepositoryImpl
 import com.example.giffmedanextone.feature_item.domain.repository.ListsRepository
+import com.example.giffmedanextone.feature_item.domain.use_case.AddListUseCase
 import com.example.giffmedanextone.feature_item.domain.use_case.DeleteListUseCase
 import com.example.giffmedanextone.feature_item.domain.use_case.GetListsUseCase
 import com.example.giffmedanextone.feature_item.domain.use_case.ListsUseCases
@@ -39,7 +40,8 @@ object AppModule {
     fun providesListsUseCases(repository: ListsRepository): ListsUseCases {
         return ListsUseCases(
             getListsUseCase = GetListsUseCase(repository),
-            deleteListUseCase = DeleteListUseCase(repository)
+            deleteListUseCase = DeleteListUseCase(repository),
+            addListUseCase = AddListUseCase(repository)
         )
     }
 }

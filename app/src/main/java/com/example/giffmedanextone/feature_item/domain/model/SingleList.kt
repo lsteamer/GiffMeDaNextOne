@@ -3,6 +3,7 @@ package com.example.giffmedanextone.feature_item.domain.model
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.giffmedanextone.ui.theme.*
+import java.lang.Exception
 import kotlin.collections.List
 
 @Entity
@@ -20,3 +21,5 @@ data class SingleList(
         val listColors = listOf(CyanPink, IntenseRed, LivelyOrange, CoolYellow, CalmGreen)
     }
 }
+
+class InvalidListException(message: String) : Exception(message)
