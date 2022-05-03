@@ -34,6 +34,10 @@ class ListsViewModel @Inject constructor(
     fun onEvent(event: ListsEvent) {
         when (event) {
 
+            is ListsEvent.GiffMeDaNextOne -> {
+
+            }
+
             is ListsEvent.Order -> {
                 if (
                     state.value.listsOrder::class == event.listOrder::class &&

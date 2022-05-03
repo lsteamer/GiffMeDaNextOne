@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">GiffMeDaNextOne</string>
+    <string name="composable_radio_button_title">Title</string>
+    <string name="composable_radio_button_order_created">Created</string>
+    <string name="composable_radio_button_order_last_accessed">Last Accessed</string>
+    <string name="composable_radio_button_order_color">Color</string>
+    <string name="composable_radio_button_order_ascending">Ascending</string>
+    <string name="composable_radio_button_order_descending">Descending</string>
 </resources>
