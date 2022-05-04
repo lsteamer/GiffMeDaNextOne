@@ -27,22 +27,11 @@ fun Greeting(name: String) {
     Text(text = "Hello $name!")
 }
 
-val list = SingleList(
-    "Movie",
-    "Matrix",
-    emptyList(),
-    emptyList(),
-    Color.DKGRAY,
-    100,
-    100
-)
 
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
     GiffMeDaNextOneTheme {
-
-        SingleListItem(list = list)
-
+        SingleListItem()
     }
 }

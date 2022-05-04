@@ -9,6 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -16,29 +17,46 @@ import com.example.giffmedanextone.feature_item.domain.model.SingleList
 
 @Composable
 fun SingleListItem(
-    list: SingleList,
-    modifier: Modifier = Modifier,
+    singleList: SingleList = SingleList(
+        "Movie",
+        "Matrix",
+        emptyList(),
+        emptyList(),
+        android.graphics.Color.DKGRAY,
+        100,
+        100
+    ),
+    modifier: Modifier = Modifier.fillMaxWidth(),
     cornerRadius: Dp = 10.dp,
     elevation: Dp = 5.dp
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(cornerRadius),
-        elevation = elevation
+        elevation = elevation,
+        backgroundColor = Color.Cyan
     ) {
-        Box(modifier = Modifier.height(50.dp)) {
-            Column(
-                modifier
-                    .fillMaxSize()
-                    .padding(12.dp),
-                horizontalAlignment = Alignment.Start
-            ) {
-                Text(list.title, style = TextStyle(color = Color.Black, fontSize = 16.sp))
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(list.currentItem, style = TextStyle(color = Color.Black, fontSize = 16.sp))
-            }
-
+        Column(
+            modifier
+                .padding(12.dp),
+            horizontalAlignment = Alignment.Start
+        ) {
+            Text(
+                text = singleList.title,
+                style = TextStyle(color = Color.Black, fontSize = 16.sp)
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = singleList.currentItem,
+                style = TextStyle(color = Color.Black, fontSize = 16.sp)
+            )
         }
 
     }
+}
+
+@Preview
+@Composable
+private fun SingleListItemPreview() {
+    SingleListItem()
 }
