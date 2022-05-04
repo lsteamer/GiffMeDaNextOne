@@ -6,4 +6,5 @@
     <string name="composable_radio_button_order_color">Color</string>
     <string name="composable_radio_button_order_ascending">Ascending</string>
     <string name="composable_radio_button_order_descending">Descending</string>
+    <string name="button_add_description">Add note</string>
 </resources>
