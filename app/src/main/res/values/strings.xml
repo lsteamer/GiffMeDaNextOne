@@ -7,4 +7,9 @@
     <string name="composable_radio_button_order_ascending">Ascending</string>
     <string name="composable_radio_button_order_descending">Descending</string>
     <string name="button_add_description">Add note</string>
+    <string name="give_title_hint">"Enter a title…"</string>
+    <string name="give_content_hint">"Enter an item…"</string>
+    <string name="give_next_content_hint">"Enter the next item…"</string>
+    <string name="first_current_item_label">Click me to get your first random Item</string>
+    <string name="list_error_message_label">Unable to save the note</string>
 </resources>

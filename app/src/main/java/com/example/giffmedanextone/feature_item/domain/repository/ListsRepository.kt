@@ -5,7 +5,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface ListsRepository {
 
-    fun getLists() : Flow<List<SingleList>>
+    fun getLists(): Flow<List<SingleList>>
+
+    suspend fun getSingleListById(id: Int): SingleList?
 
     suspend fun insertList(list: SingleList)
 

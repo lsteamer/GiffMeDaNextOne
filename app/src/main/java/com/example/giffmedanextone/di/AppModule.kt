@@ -5,10 +5,7 @@ import androidx.room.Room
 import com.example.giffmedanextone.feature_item.data.data_source.ListsDataBase
 import com.example.giffmedanextone.feature_item.data.repository.ListsRepositoryImpl
 import com.example.giffmedanextone.feature_item.domain.repository.ListsRepository
-import com.example.giffmedanextone.feature_item.domain.use_case.AddListUseCase
-import com.example.giffmedanextone.feature_item.domain.use_case.DeleteListUseCase
-import com.example.giffmedanextone.feature_item.domain.use_case.GetListsUseCase
-import com.example.giffmedanextone.feature_item.domain.use_case.ListsUseCases
+import com.example.giffmedanextone.feature_item.domain.use_case.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -41,7 +38,8 @@ object AppModule {
         return ListsUseCases(
             getListsUseCase = GetListsUseCase(repository),
             deleteListUseCase = DeleteListUseCase(repository),
-            addListUseCase = AddListUseCase(repository)
+            addListUseCase = AddListUseCase(repository),
+            getSingleListUseCase = GetSingleListUseCase(repository)
         )
     }
 }
