@@ -12,4 +12,5 @@
     <string name="give_next_content_hint">"Enter the next item…"</string>
     <string name="first_current_item_label">Click me to get your first random Item</string>
     <string name="list_error_message_label">Unable to save the note</string>
+    <string name="content_description_save_button">Save single list</string>
 </resources>

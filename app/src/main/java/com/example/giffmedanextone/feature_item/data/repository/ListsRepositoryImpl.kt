@@ -9,7 +9,10 @@ import kotlinx.coroutines.flow.Flow
 class ListsRepositoryImpl(
     private val dao: ListsDao
 ) : ListsRepository {
+
     override fun getLists(): Flow<List<SingleList>> = dao.getLists()
+
+    override suspend fun getSingleListById(id: Int): SingleList? = dao.getSingleListById(id)
 
     @Throws(InvalidListException::class)
     override suspend fun insertList(list: SingleList) {

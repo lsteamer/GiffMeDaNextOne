@@ -21,6 +21,7 @@ import com.example.giffmedanextone.feature_item.domain.model.SingleList
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SingleListItem(
+    modifier: Modifier = Modifier,
     singleList: SingleList = SingleList(
         "Movie",
         "Matrix",
@@ -30,7 +31,6 @@ fun SingleListItem(
         100,
         100
     ),
-    modifier: Modifier = Modifier.fillMaxWidth(),
     cornerRadius: Dp = 10.dp,
     elevation: Dp = 5.dp
 ) {

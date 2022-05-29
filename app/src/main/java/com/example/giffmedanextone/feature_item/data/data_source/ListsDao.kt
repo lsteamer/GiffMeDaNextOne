@@ -11,6 +11,9 @@ interface ListsDao {
     @Query("SELECT * FROM singlelist")
     fun getLists() : Flow<List<SingleList>>
 
+    @Query("SELECT * FROM singlelist WHERE id = :id")
+    suspend fun getSingleListById(id: Int) : SingleList
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertList(list: SingleList)
 
