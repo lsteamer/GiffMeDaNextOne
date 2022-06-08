@@ -21,6 +21,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.giffmedanextone.feature_item.presentation.lists.components.OrderSection
 import com.example.giffmedanextone.feature_item.presentation.lists.components.SingleListItem
+import com.example.giffmedanextone.feature_item.presentation.util.Screen
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -30,11 +31,11 @@ fun ListsScreen(
 ) {
     val state = viewModel.state.value
     val scaffoldState = rememberScaffoldState()
-    val scope = rememberCoroutineScope()
+    //val scope = rememberCoroutineScope()
 
     Scaffold(floatingActionButton = {
         FloatingActionButton(onClick = {
-
+            navController.navigate(Screen.AddEditSingleListScreen.route)
         }, backgroundColor = MaterialTheme.colors.primary) {
             Icon(
                 imageVector = Icons.Default.Add,
@@ -53,7 +54,7 @@ fun ListsScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Your note",
+                    text = stringResource(id = R.string.app_name),
                     style = MaterialTheme.typography.h4
                 )
                 IconButton(
@@ -97,7 +98,10 @@ fun ListsScreen(
                                     )
                                 )
                             }, onLongClick = {
-                                //take me to the other Nav stuff
+                                navController.navigate(
+                                    Screen.AddEditSingleListScreen.route +
+                                            "?listId=${list.id}&listColor=${list.color}"
+                                )
                             })
                     )
                     Spacer(Modifier.height(16.dp))

@@ -2,7 +2,9 @@ package com.example.giffmedanextone.feature_item.presentation.add_edit_single_li
 
 import android.content.Context
 import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.SavedStateHandle
@@ -40,8 +42,8 @@ class AddEditSingleListViewModel @Inject constructor(
     )
     val listCurrentItem: State<SingleListTextFieldState> = _listCurrentItem
 
-    private val _currentList = mutableStateOf<List<String>>(emptyList())
-    val currentList: State<List<String>> = _currentList
+    private val _currentList = mutableStateListOf<String>()
+    val currentList: SnapshotStateList<String> = _currentList
 
     private val _listColor = mutableStateOf<Int>(SingleList.listColors.random().toArgb())
     val listColor: State<Int> = _listColor
@@ -66,7 +68,7 @@ class AddEditSingleListViewModel @Inject constructor(
                             hint = context.getString(R.string.give_next_content_hint),
                             isHintVisible = true
                         )
-                        _currentList.value = singleList.bareList
+                        _currentList.addAll(singleList.bareList)
                         _listColor.value = singleList.color
 
                     }
@@ -100,23 +102,29 @@ class AddEditSingleListViewModel @Inject constructor(
             is AddEditSingleListEvent.ChangeColor -> {
                 _listColor.value = event.color
             }
-            AddEditSingleListEvent.AddContentToList -> {
-                _currentList.value = _currentList.value.also { _listCurrentItem.value }
+            is AddEditSingleListEvent.AddEntryToList -> {
+                _currentList.add(_listCurrentItem.value.text)
                 _listCurrentItem.value = listCurrentItem.value.copy(
                     text = "",
                     hint = context.getString(R.string.give_next_content_hint),
-                    isHintVisible = true
+                    isHintVisible = false
                 )
+                viewModelScope.launch {
+                    _eventFlow.emit(UIEvent.AddEntryToList)
+                }
             }
-            AddEditSingleListEvent.SaveList -> {
+            is AddEditSingleListEvent.DeleteEntryFromList -> {
+                _currentList.remove(event.entry)
+            }
+            is AddEditSingleListEvent.SaveList -> {
                 viewModelScope.launch {
                     try {
                         listsUseCases.addListUseCase(
                             SingleList(
                                 title = listTitle.value.text,
                                 currentItem = context.getString(R.string.first_current_item_label),
-                                bareList = currentList.value,
-                                accumulatingList = currentList.value,
+                                bareList = currentList,
+                                accumulatingList = currentList,
                                 color = listColor.value,
                                 timeCreated = System.currentTimeMillis(),
                                 timeLastAccessed = System.currentTimeMillis(),
@@ -139,6 +147,7 @@ class AddEditSingleListViewModel @Inject constructor(
     sealed class UIEvent {
         data class ShowSnackBar(val message: String) : UIEvent()
         object SaveCurrentList : UIEvent()
+        object AddEntryToList : UIEvent()
     }
 
 }

@@ -3,6 +3,7 @@ package com.example.giffmedanextone.feature_item.presentation.add_edit_single_li
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
@@ -30,12 +31,14 @@ fun SingleContent(
     modifier: Modifier = Modifier,
     contentText: String = "Item #1",
     color: Int = SingleList.listColors.random().toArgb(),
+    onDeleteClicked: () -> Unit,
     cornerRadius: Dp = 10.dp,
     elevation: Dp = 5.dp
 ) {
     Card(
         modifier = modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .wrapContentHeight(),
         shape = RoundedCornerShape(cornerRadius),
         elevation = elevation,
         backgroundColor = Color(color)
@@ -49,8 +52,8 @@ fun SingleContent(
             horizontalArrangement = Arrangement.End,
         ) {
             IconButton(onClick = {
-
-            }){
+                onDeleteClicked.invoke()
+            }) {
                 Icon(
                     imageVector = Icons.Default.Delete,
                     contentDescription = stringResource(R.string.content_description_save_button)
@@ -59,11 +62,10 @@ fun SingleContent(
         }
 
     }
-
 }
 
 @Preview
 @Composable
 private fun SingleContentPreview() {
-   SingleContent()
+    SingleContent(onDeleteClicked = {})
 }

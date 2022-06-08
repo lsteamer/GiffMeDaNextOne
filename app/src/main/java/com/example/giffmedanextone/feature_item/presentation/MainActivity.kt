@@ -1,23 +1,59 @@
 package com.example.giffmedanextone.feature_item.presentation
 
-import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material.Colors
-import androidx.compose.material.ListItem
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.giffmedanextone.feature_item.domain.model.SingleList
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.example.giffmedanextone.feature_item.presentation.add_edit_single_list.AddEditSingleListScreen
+import com.example.giffmedanextone.feature_item.presentation.lists.ListsScreen
 import com.example.giffmedanextone.feature_item.presentation.lists.components.SingleListItem
+import com.example.giffmedanextone.feature_item.presentation.util.Screen
 import com.example.giffmedanextone.ui.theme.GiffMeDaNextOneTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Greeting(name = "Steamer")
+            Surface(color = MaterialTheme.colors.background) {
+                val navController = rememberNavController()
+                NavHost(
+                    navController = navController,
+                    startDestination = Screen.ListsScreen.route
+                ) {
+                    composable(route = Screen.ListsScreen.route) {
+                        ListsScreen(navController = navController)
+                    }
+                    composable(route = Screen.AddEditSingleListScreen.route +
+                            "?listId={listId}&listColor={listColor}",
+                        arguments = listOf(
+                            navArgument(
+                                name = "listId"
+                            ) {
+                                type = NavType.IntType
+                                defaultValue = -1
+                            },
+                            navArgument(
+                                name = "listColor"
+                            ) {
+                                type = NavType.IntType
+                                defaultValue = -1
+                            }
+                        )
+                    ) {
+                        val color = it.arguments?.getInt("listColor") ?: -1
+                        AddEditSingleListScreen(navController = navController, listColor = color)
+                    }
+                }
+            }
         }
     }
 }

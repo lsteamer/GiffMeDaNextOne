@@ -22,12 +22,28 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.draw.alpha
 import com.example.giffmedanextone.R
 import com.example.giffmedanextone.feature_item.domain.model.SingleList
+import com.example.giffmedanextone.feature_item.presentation.add_edit_single_list.components.SingleContent
 import com.example.giffmedanextone.feature_item.presentation.add_edit_single_list.components.TransparentHintTextField
+import com.example.giffmedanextone.feature_item.presentation.util.colorPicker
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-//todo screentime: 2:01:25
 @Composable
 fun AddEditSingleListScreen(
     navController: NavController,
@@ -36,17 +52,38 @@ fun AddEditSingleListScreen(
 ) {
     val titleState = viewModel.listTitle.value
     val currentItemState = viewModel.listCurrentItem.value
-    val currentListState = viewModel.currentList.value
+    val currentListSnapshotState = viewModel.currentList
 
     val scaffoldState = rememberScaffoldState()
 
     val listBackgroundAnimatable = remember {
         Animatable(
-            Color(if (listColor != -1) listColor else viewModel.listColor.value)
+            Color(if (listColor != -1) listColor else viewModel.listColor.value).colorPicker
         )
     }
 
     val scope = rememberCoroutineScope()
+
+    LaunchedEffect(key1 = true) {
+        viewModel.eventFlow.collectLatest { event ->
+            when (event) {
+                AddEditSingleListViewModel.UIEvent.SaveCurrentList -> {
+                    navController.navigateUp()
+                }
+                is AddEditSingleListViewModel.UIEvent.ShowSnackBar -> {
+                    scaffoldState.snackbarHostState.showSnackbar(
+                        message = event.message
+                    )
+                }
+                AddEditSingleListViewModel.UIEvent.AddEntryToList -> {
+
+
+                }
+            }
+
+        }
+
+    }
 
     Scaffold(
         floatingActionButton = {
@@ -65,17 +102,87 @@ fun AddEditSingleListScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(listBackgroundAnimatable.value)
                 .padding(16.dp)
+                .background(listBackgroundAnimatable.value)
         ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+            ) {
+
+                //Title
+                TransparentHintTextField(
+                    text = titleState.text,
+                    hint = titleState.hint,
+                    onValueChange = {
+                        viewModel.onEvent(AddEditSingleListEvent.EnteredTitle(it))
+                    },
+                    onFocusChange = {
+                        viewModel.onEvent(AddEditSingleListEvent.ChangeTitleFocus(it))
+                    },
+                    isHintVisible = titleState.isHintVisible,
+                    singleLine = true,
+                    textStyle = MaterialTheme.typography.h5
+                )
+                //User input
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(10.dp),
+                    elevation = 5.dp,
+                    backgroundColor = Color.White
+                ) {
+                    TransparentHintTextField(
+                        text = currentItemState.text,
+                        hint = currentItemState.hint,
+                        onValueChange = {
+                            viewModel.onEvent(AddEditSingleListEvent.EnteredContent(it))
+                        },
+                        onFocusChange = {
+                            viewModel.onEvent(AddEditSingleListEvent.ChangeContentFocus(it))
+                        },
+                        isHintVisible = currentItemState.isHintVisible,
+                        singleLine = true,
+                        textStyle = MaterialTheme.typography.body1
+                    )
+                    Row(horizontalArrangement = Arrangement.End) {
+                        IconButton(
+                            onClick = {
+                                viewModel.onEvent(AddEditSingleListEvent.AddEntryToList)
+                            },
+                            modifier = Modifier.alpha(
+                                if (currentItemState.text.isBlank()) {
+                                    0f
+                                } else {
+                                    1f
+                                }
+                            )
+                        ) {
+                            Icon(
+                                imageVector = if (currentItemState.text.isBlank()) {
+                                    Icons.Default.Edit
+                                } else {
+                                    Icons.Default.Check
+                                },
+                                contentDescription = stringResource(R.string.button_add_single_item_description)
+                            )
+                        }
+
+                    }
+
+                }
+
+            }
+            //colors to choose
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .background(listBackgroundAnimatable.value)
                     .padding(8.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 SingleList.listColors.forEach { color ->
-                    val colorInt = color.toArgb()
+                    val colorInt = color.colorPicker.toArgb()
                     Box(
                         modifier = Modifier
                             .size(50.dp)
@@ -104,19 +211,20 @@ fun AddEditSingleListScreen(
             }
 
             Spacer(modifier = Modifier.height(16.dp))
-            TransparentHintTextField(
-                text = titleState.text,
-                hint = titleState.hint,
-                onValueChange = {
-                    viewModel.onEvent(AddEditSingleListEvent.EnteredTitle(it))
-                },
-                onFocusChange = {
-                    viewModel.onEvent(AddEditSingleListEvent.ChangeTitleFocus(it))
-                },
-                isHintVisible = titleState.isHintVisible,
-                singleLine = true,
-                textStyle = MaterialTheme.typography.h5
-            )
+
+            LazyColumn(modifier = Modifier.fillMaxSize()) {
+                items(currentListSnapshotState) { itemName ->
+                    SingleContent(
+                        contentText = itemName,
+                        color = viewModel.listColor.value,
+                        onDeleteClicked = {
+                            viewModel.onEvent(AddEditSingleListEvent.DeleteEntryFromList(itemName))
+                        }
+                    )
+
+                }
+
+            }
 
         }
 
