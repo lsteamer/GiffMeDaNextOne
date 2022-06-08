@@ -182,7 +182,8 @@ fun AddEditSingleListScreen(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 SingleList.listColors.forEach { color ->
-                    val colorInt = color.colorPicker.toArgb()
+                    val colorInt = color.toArgb()
+                    val colorIntBackground = color.colorPicker.toArgb()
                     Box(
                         modifier = Modifier
                             .size(50.dp)
@@ -198,7 +199,7 @@ fun AddEditSingleListScreen(
                             .clickable {
                                 scope.launch {
                                     listBackgroundAnimatable.animateTo(
-                                        targetValue = Color(colorInt),
+                                        targetValue = Color(colorIntBackground),
                                         animationSpec = tween(
                                             durationMillis = 500
                                         )
