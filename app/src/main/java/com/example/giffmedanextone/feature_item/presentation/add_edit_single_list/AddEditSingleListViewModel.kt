@@ -45,7 +45,7 @@ class AddEditSingleListViewModel @Inject constructor(
     private val _currentList = mutableStateListOf<String>()
     val currentList: SnapshotStateList<String> = _currentList
 
-    private val _listColor = mutableStateOf<Int>(SingleList.listColors.random().toArgb())
+    private val _listColor = mutableStateOf(SingleList.listColors.random().toArgb())
     val listColor: State<Int> = _listColor
 
     private val _eventFlow = MutableSharedFlow<UIEvent>()
@@ -54,7 +54,7 @@ class AddEditSingleListViewModel @Inject constructor(
     private var currentNoteId: Int? = null
 
     init {
-        savedStateHandle.get<Int>("noteId")?.let { noteId ->
+        savedStateHandle.get<Int>("listId")?.let { noteId ->
             if(noteId != -1){
                 viewModelScope.launch {
                     listsUseCases.getSingleListUseCase(noteId)?.also { singleList ->

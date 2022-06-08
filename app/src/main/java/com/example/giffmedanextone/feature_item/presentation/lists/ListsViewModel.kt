@@ -35,6 +35,9 @@ class ListsViewModel @Inject constructor(
         when (event) {
 
             is ListsEvent.GiffMeDaNextOne -> {
+                viewModelScope.launch {
+
+                }
 
             }
 
