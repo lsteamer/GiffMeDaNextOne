@@ -11,6 +11,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Sort
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,6 +23,7 @@ import androidx.navigation.NavController
 import com.example.giffmedanextone.feature_item.presentation.lists.components.OrderSection
 import com.example.giffmedanextone.feature_item.presentation.lists.components.SingleListItem
 import com.example.giffmedanextone.feature_item.presentation.util.Screen
+import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -31,7 +33,22 @@ fun ListsScreen(
 ) {
     val state = viewModel.state.value
     val scaffoldState = rememberScaffoldState()
-    //val scope = rememberCoroutineScope()
+
+    val errorMessage: String = stringResource(id = R.string.next_one_error_message_label)
+
+    LaunchedEffect(key1 = true) {
+        viewModel.eventFlow.collectLatest { event ->
+            when (event) {
+                ListsViewModel.UIEvent.AddEntryToList -> TODO()
+                ListsViewModel.UIEvent.GiffMeDaNextOne -> TODO()
+                ListsViewModel.UIEvent.ShowErrorSnackBar -> {
+                    scaffoldState.snackbarHostState.showSnackbar(
+                        message = errorMessage
+                    )
+                }
+            }
+        }
+    }
 
     Scaffold(floatingActionButton = {
         FloatingActionButton(onClick = {

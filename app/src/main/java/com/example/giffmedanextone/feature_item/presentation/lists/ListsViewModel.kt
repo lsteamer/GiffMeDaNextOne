@@ -4,12 +4,15 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.giffmedanextone.feature_item.domain.model.InvalidListException
 import com.example.giffmedanextone.feature_item.domain.model.SingleList
 import com.example.giffmedanextone.feature_item.domain.use_case.ListsUseCases
 import com.example.giffmedanextone.feature_item.domain.util.ListOrder
 import com.example.giffmedanextone.feature_item.domain.util.OrderType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -27,15 +30,55 @@ class ListsViewModel @Inject constructor(
 
     private var getListsJob: Job? = null
 
-    init{
+    private val _eventFlow = MutableSharedFlow<UIEvent>()
+    val eventFlow = _eventFlow.asSharedFlow()
+
+    init {
         getLists(ListOrder.LastAccessed(OrderType.Descending))
     }
 
     fun onEvent(event: ListsEvent) {
         when (event) {
-
             is ListsEvent.GiffMeDaNextOne -> {
+                val snapshotState = _state.value.lists.toMutableList()
+                val currentSingleList = event.list
+                snapshotState.remove(currentSingleList)
+
+                val currentItem = currentSingleList.accumulatingList.random()
+
+                val currentAccumulatingList: MutableList<String> =
+                    (currentSingleList.accumulatingList + currentSingleList.bareList).toMutableList()
+
+                while (currentAccumulatingList.contains(currentItem)) {
+                    currentAccumulatingList.remove(currentItem)
+                }
+
+                val newCurrentSingleList = SingleList(
+                    title = currentSingleList.title,
+                    currentItem = currentItem,
+                    bareList = currentSingleList.bareList,
+                    accumulatingList = currentAccumulatingList,
+                    color = currentSingleList.color,
+                    timeCreated = currentSingleList.timeCreated,
+                    timeLastAccessed = System.currentTimeMillis(),
+                    id = currentSingleList.id
+                )
+
+                snapshotState.add(newCurrentSingleList)
+
+                _state.value = _state.value.copy(lists = snapshotState)
+
                 viewModelScope.launch {
+                    try {
+                        listsUseCases.addListUseCase(
+                            newCurrentSingleList
+                        )
+
+                    } catch (e: InvalidListException) {
+                        _eventFlow.emit(
+                            UIEvent.ShowErrorSnackBar
+                        )
+                    }
 
                 }
 
@@ -80,6 +123,12 @@ class ListsViewModel @Inject constructor(
                 )
             }
             .launchIn(viewModelScope)
+    }
+
+    sealed class UIEvent {
+        object ShowErrorSnackBar : UIEvent()
+        object GiffMeDaNextOne : UIEvent()
+        object AddEntryToList : UIEvent()
     }
 
 }
