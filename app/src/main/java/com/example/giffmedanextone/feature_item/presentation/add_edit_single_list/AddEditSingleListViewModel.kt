@@ -1,21 +1,17 @@
 package com.example.giffmedanextone.feature_item.presentation.add_edit_single_list
 
-import android.content.Context
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.giffmedanextone.R
 import com.example.giffmedanextone.feature_item.domain.model.InvalidListException
 import com.example.giffmedanextone.feature_item.domain.model.SingleList
 import com.example.giffmedanextone.feature_item.domain.use_case.ListsUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
@@ -24,22 +20,13 @@ import javax.inject.Inject
 @HiltViewModel
 class AddEditSingleListViewModel @Inject constructor(
     private val listsUseCases: ListsUseCases,
-    savedStateHandle: SavedStateHandle,
-    @ApplicationContext private val context: Context
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val _listTitle = mutableStateOf(
-        SingleListTextFieldState(
-            hint = context.getString(R.string.give_title_hint)
-        )
-    )
+    private val _listTitle = mutableStateOf(SingleListTextFieldState())
     val listTitle: State<SingleListTextFieldState> = _listTitle
 
-    private val _listCurrentItem = mutableStateOf(
-        SingleListTextFieldState(
-            hint = context.getString(R.string.give_content_hint)
-        )
-    )
+    private val _listCurrentItem = mutableStateOf(SingleListTextFieldState())
     val listCurrentItem: State<SingleListTextFieldState> = _listCurrentItem
 
     private val _currentList = mutableStateListOf<String>()
@@ -55,7 +42,7 @@ class AddEditSingleListViewModel @Inject constructor(
 
     init {
         savedStateHandle.get<Int>("listId")?.let { noteId ->
-            if(noteId != -1){
+            if (noteId != -1) {
                 viewModelScope.launch {
                     listsUseCases.getSingleListUseCase(noteId)?.also { singleList ->
                         currentNoteId = singleList.id
@@ -65,7 +52,6 @@ class AddEditSingleListViewModel @Inject constructor(
                         )
                         _listCurrentItem.value = listCurrentItem.value.copy(
                             text = "",
-                            hint = context.getString(R.string.give_next_content_hint),
                             isHintVisible = true
                         )
                         _currentList.addAll(singleList.bareList)
@@ -106,7 +92,6 @@ class AddEditSingleListViewModel @Inject constructor(
                 _currentList.add(_listCurrentItem.value.text)
                 _listCurrentItem.value = listCurrentItem.value.copy(
                     text = "",
-                    hint = context.getString(R.string.give_next_content_hint),
                     isHintVisible = false
                 )
                 viewModelScope.launch {
@@ -122,7 +107,7 @@ class AddEditSingleListViewModel @Inject constructor(
                         listsUseCases.addListUseCase(
                             SingleList(
                                 title = listTitle.value.text,
-                                currentItem = context.getString(R.string.first_current_item_label),
+                                currentItem = "",
                                 bareList = currentList,
                                 accumulatingList = currentList,
                                 color = listColor.value,
@@ -134,9 +119,7 @@ class AddEditSingleListViewModel @Inject constructor(
                         _eventFlow.emit(UIEvent.SaveCurrentList)
                     } catch (e: InvalidListException) {
                         _eventFlow.emit(
-                            UIEvent.ShowSnackBar(
-                                message = context.getString(R.string.list_error_message_label)
-                            )
+                            UIEvent.ShowErrorSnackBar
                         )
                     }
                 }
@@ -145,7 +128,7 @@ class AddEditSingleListViewModel @Inject constructor(
     }
 
     sealed class UIEvent {
-        data class ShowSnackBar(val message: String) : UIEvent()
+        object ShowErrorSnackBar : UIEvent()
         object SaveCurrentList : UIEvent()
         object AddEntryToList : UIEvent()
     }

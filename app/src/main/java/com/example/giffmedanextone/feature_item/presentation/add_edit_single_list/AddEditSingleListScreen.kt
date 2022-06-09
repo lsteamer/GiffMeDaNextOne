@@ -31,7 +31,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.LaunchedEffect
@@ -56,6 +55,8 @@ fun AddEditSingleListScreen(
 
     val scaffoldState = rememberScaffoldState()
 
+    val errorMessage: String = stringResource(id = R.string.list_error_message_label)
+
     val listBackgroundAnimatable = remember {
         Animatable(
             Color(if (listColor != -1) listColor else viewModel.listColor.value).colorPicker
@@ -70,9 +71,9 @@ fun AddEditSingleListScreen(
                 AddEditSingleListViewModel.UIEvent.SaveCurrentList -> {
                     navController.navigateUp()
                 }
-                is AddEditSingleListViewModel.UIEvent.ShowSnackBar -> {
+                AddEditSingleListViewModel.UIEvent.ShowErrorSnackBar -> {
                     scaffoldState.snackbarHostState.showSnackbar(
-                        message = event.message
+                        message = errorMessage
                     )
                 }
                 AddEditSingleListViewModel.UIEvent.AddEntryToList -> {
@@ -114,7 +115,7 @@ fun AddEditSingleListScreen(
                 //Title
                 TransparentHintTextField(
                     text = titleState.text,
-                    hint = titleState.hint,
+                    hint = stringResource(id = R.string.give_title_hint),
                     onValueChange = {
                         viewModel.onEvent(AddEditSingleListEvent.EnteredTitle(it))
                     },
@@ -134,7 +135,7 @@ fun AddEditSingleListScreen(
                 ) {
                     TransparentHintTextField(
                         text = currentItemState.text,
-                        hint = currentItemState.hint,
+                        hint = stringResource(id = R.string.give_content_hint),
                         onValueChange = {
                             viewModel.onEvent(AddEditSingleListEvent.EnteredContent(it))
                         },
