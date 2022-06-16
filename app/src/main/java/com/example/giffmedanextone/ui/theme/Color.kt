@@ -16,3 +16,8 @@ val CoolYellow = Color(0xFFF7DB4F)
 val CoolYellowBackground = Color(0xFFFAE995)
 val CalmGreen = Color(0xFF2F9599)
 val CalmGreenBackground = Color(0xFF82BFC1)
+
+
+
+val AliceBlueBackground = Color(0xFFF0F8FF)
+val DarkGrayBackground = Color(0xFF202020)

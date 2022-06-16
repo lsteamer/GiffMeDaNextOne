@@ -23,36 +23,43 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Surface(color = MaterialTheme.colors.background) {
-                val navController = rememberNavController()
-                NavHost(
-                    navController = navController,
-                    startDestination = Screen.ListsScreen.route
-                ) {
-                    composable(route = Screen.ListsScreen.route) {
-                        ListsScreen(navController = navController)
-                    }
-                    composable(route = Screen.AddEditSingleListScreen.route +
-                            "?listId={listId}&listColor={listColor}",
-                        arguments = listOf(
-                            navArgument(
-                                name = "listId"
-                            ) {
-                                type = NavType.IntType
-                                defaultValue = -1
-                            },
-                            navArgument(
-                                name = "listColor"
-                            ) {
-                                type = NavType.IntType
-                                defaultValue = -1
-                            }
-                        )
+            GiffMeDaNextOneTheme {
+                Surface(color = MaterialTheme.colors.background) {
+                    val navController = rememberNavController()
+                    NavHost(
+                        navController = navController,
+                        startDestination = Screen.ListsScreen.route
                     ) {
-                        val color = it.arguments?.getInt("listColor") ?: -1
-                        AddEditSingleListScreen(navController = navController, listColor = color)
+                        composable(route = Screen.ListsScreen.route) {
+                            ListsScreen(navController = navController)
+                        }
+                        composable(route = Screen.AddEditSingleListScreen.route +
+                                "?listId={listId}&listColor={listColor}",
+                            arguments = listOf(
+                                navArgument(
+                                    name = "listId"
+                                ) {
+                                    type = NavType.IntType
+                                    defaultValue = -1
+                                },
+                                navArgument(
+                                    name = "listColor"
+                                ) {
+                                    type = NavType.IntType
+                                    defaultValue = -1
+                                }
+                            )
+                        ) {
+                            val color = it.arguments?.getInt("listColor") ?: -1
+                            AddEditSingleListScreen(
+                                navController = navController,
+                                listColor = color
+                            )
+                        }
                     }
                 }
+
+
             }
         }
     }

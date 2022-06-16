@@ -8,7 +8,7 @@
     <string name="composable_radio_button_order_descending">Descending</string>
     <string name="button_add_description">Add list</string>
     <string name="button_add_single_item_description">Single Entry button</string>
-    <string name="give_title_hint">"Enter a title for your list…"</string>
+    <string name="give_title_hint">"Enter the list title…"</string>
     <string name="give_content_hint">"Enter an item…"</string>
     <string name="give_next_content_hint">"Enter the next item…"</string>
     <string name="first_current_item_label">Click me to get your first random Item</string>

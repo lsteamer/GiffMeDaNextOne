@@ -51,7 +51,7 @@ fun AddEditSingleListScreen(
 ) {
     val titleState = viewModel.listTitle.value
     val currentItemState = viewModel.listCurrentItem.value
-    val currentListSnapshotState = viewModel.currentList
+    val currentListSnapshotState = viewModel.currentList.reversed()
 
     val scaffoldState = rememberScaffoldState()
 
@@ -103,77 +103,77 @@ fun AddEditSingleListScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
                 .background(listBackgroundAnimatable.value)
+                .padding(16.dp)
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight()
-            ) {
 
-                //Title
+
+            Spacer(modifier = Modifier.height(16.dp))
+            //Title
+            TransparentHintTextField(
+                text = titleState.text,
+                hint = stringResource(id = R.string.give_title_hint),
+                onValueChange = {
+                    viewModel.onEvent(AddEditSingleListEvent.EnteredTitle(it))
+                },
+                onFocusChange = {
+                    viewModel.onEvent(AddEditSingleListEvent.ChangeTitleFocus(it))
+                },
+                isHintVisible = titleState.isHintVisible,
+                singleLine = true,
+                textStyle = MaterialTheme.typography.h4
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            //User input
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(10.dp),
+                elevation = 5.dp,
+                backgroundColor = Color.White
+            ) {
                 TransparentHintTextField(
-                    text = titleState.text,
-                    hint = stringResource(id = R.string.give_title_hint),
+                    text = currentItemState.text,
+                    hint = stringResource(id = R.string.give_content_hint),
+                    modifier = Modifier.padding(vertical = 4.dp),
                     onValueChange = {
-                        viewModel.onEvent(AddEditSingleListEvent.EnteredTitle(it))
+                        viewModel.onEvent(AddEditSingleListEvent.EnteredContent(it))
                     },
                     onFocusChange = {
-                        viewModel.onEvent(AddEditSingleListEvent.ChangeTitleFocus(it))
+                        viewModel.onEvent(AddEditSingleListEvent.ChangeContentFocus(it))
                     },
-                    isHintVisible = titleState.isHintVisible,
+                    isHintVisible = currentItemState.isHintVisible,
                     singleLine = true,
-                    textStyle = MaterialTheme.typography.h5
+                    textStyle = MaterialTheme.typography.body1
                 )
-                //User input
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(10.dp),
-                    elevation = 5.dp,
-                    backgroundColor = Color.White
-                ) {
-                    TransparentHintTextField(
-                        text = currentItemState.text,
-                        hint = stringResource(id = R.string.give_content_hint),
-                        onValueChange = {
-                            viewModel.onEvent(AddEditSingleListEvent.EnteredContent(it))
+                Row(horizontalArrangement = Arrangement.End) {
+                    IconButton(
+                        onClick = {
+                            viewModel.onEvent(AddEditSingleListEvent.AddEntryToList)
                         },
-                        onFocusChange = {
-                            viewModel.onEvent(AddEditSingleListEvent.ChangeContentFocus(it))
-                        },
-                        isHintVisible = currentItemState.isHintVisible,
-                        singleLine = true,
-                        textStyle = MaterialTheme.typography.body1
-                    )
-                    Row(horizontalArrangement = Arrangement.End) {
-                        IconButton(
-                            onClick = {
-                                viewModel.onEvent(AddEditSingleListEvent.AddEntryToList)
+                        modifier = Modifier.alpha(
+                            if (currentItemState.text.isBlank()) {
+                                0f
+                            } else {
+                                1f
+                            }
+                        )
+                    ) {
+                        Icon(
+                            imageVector = if (currentItemState.text.isBlank()) {
+                                Icons.Default.Edit
+                            } else {
+                                Icons.Default.Check
                             },
-                            modifier = Modifier.alpha(
-                                if (currentItemState.text.isBlank()) {
-                                    0f
-                                } else {
-                                    1f
-                                }
-                            )
-                        ) {
-                            Icon(
-                                imageVector = if (currentItemState.text.isBlank()) {
-                                    Icons.Default.Edit
-                                } else {
-                                    Icons.Default.Check
-                                },
-                                contentDescription = stringResource(R.string.button_add_single_item_description)
-                            )
-                        }
-
+                            contentDescription = stringResource(R.string.button_add_single_item_description)
+                        )
                     }
 
                 }
 
             }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
             //colors to choose
             Row(
                 modifier = Modifier
@@ -223,6 +223,8 @@ fun AddEditSingleListScreen(
                             viewModel.onEvent(AddEditSingleListEvent.DeleteEntryFromList(itemName))
                         }
                     )
+
+                    Spacer(modifier = Modifier.height(6.dp))
 
                 }
 

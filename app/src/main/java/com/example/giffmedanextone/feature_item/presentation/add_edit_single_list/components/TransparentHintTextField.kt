@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.focus.onFocusChanged
@@ -20,11 +21,11 @@ fun TransparentHintTextField(
     isHintVisible: Boolean = true,
     onValueChange: (String) -> Unit,
     textStyle: TextStyle = TextStyle(),
-    singleLine: Boolean = true,
+    singleLine: Boolean = false,
     onFocusChange: (FocusState) -> Unit
 ) {
     Box(
-        modifier = modifier
+        modifier = modifier, contentAlignment = Alignment.CenterStart
     ) {
         BasicTextField(
             value = text,
@@ -36,8 +37,12 @@ fun TransparentHintTextField(
                 .onFocusChanged {
                     onFocusChange(it)
                 })
-    }
-    if(isHintVisible){
-        Text(text = hint, style = textStyle, color = Color.DarkGray)
+        if (isHintVisible) {
+            Text(
+                text = hint,
+                style = textStyle,
+                color = Color.DarkGray
+            )
+        }
     }
 }
