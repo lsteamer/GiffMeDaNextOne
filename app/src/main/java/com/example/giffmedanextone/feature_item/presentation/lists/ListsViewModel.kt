@@ -40,33 +40,26 @@ class ListsViewModel @Inject constructor(
     fun onEvent(event: ListsEvent) {
         when (event) {
             is ListsEvent.GiffMeDaNextOne -> {
-                val snapshotState = _state.value.lists.toMutableList()
-                val currentSingleList = event.list
-                snapshotState.remove(currentSingleList)
 
-                val currentItem = currentSingleList.accumulatingList.random()
+                val newCurrentItem = event.list.accumulatingList.random()
 
-                val currentAccumulatingList: MutableList<String> =
-                    (currentSingleList.accumulatingList + currentSingleList.bareList).toMutableList()
+                val newCurrentAccumulatingList: MutableList<String> =
+                    (event.list.accumulatingList + event.list.bareList).toMutableList()
 
-                while (currentAccumulatingList.contains(currentItem)) {
-                    currentAccumulatingList.remove(currentItem)
+                while (newCurrentAccumulatingList.contains(newCurrentItem)) {
+                    newCurrentAccumulatingList.remove(newCurrentItem)
                 }
 
                 val newCurrentSingleList = SingleList(
-                    title = currentSingleList.title,
-                    currentItem = currentItem,
-                    bareList = currentSingleList.bareList,
-                    accumulatingList = currentAccumulatingList,
-                    color = currentSingleList.color,
-                    timeCreated = currentSingleList.timeCreated,
+                    title = event.list.title,
+                    currentItem = newCurrentItem,
+                    bareList = event.list.bareList,
+                    accumulatingList = newCurrentAccumulatingList,
+                    color = event.list.color,
+                    timeCreated = event.list.timeCreated,
                     timeLastAccessed = System.currentTimeMillis(),
-                    id = currentSingleList.id
+                    id = event.list.id
                 )
-
-                snapshotState.add(newCurrentSingleList)
-
-                _state.value = _state.value.copy(lists = snapshotState)
 
                 viewModelScope.launch {
                     try {
@@ -79,9 +72,7 @@ class ListsViewModel @Inject constructor(
                             UIEvent.ShowErrorSnackBar
                         )
                     }
-
                 }
-
             }
 
             is ListsEvent.Order -> {
