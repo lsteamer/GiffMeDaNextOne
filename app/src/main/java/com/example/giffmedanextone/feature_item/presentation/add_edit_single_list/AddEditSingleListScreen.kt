@@ -121,7 +121,8 @@ fun AddEditSingleListScreen(
                 },
                 isHintVisible = titleState.isHintVisible,
                 singleLine = true,
-                textStyle = MaterialTheme.typography.h4
+                textStyle = MaterialTheme.typography.h4,
+                onDoneClicked = { }
             )
             Spacer(modifier = Modifier.height(16.dp))
             //User input
@@ -143,7 +144,10 @@ fun AddEditSingleListScreen(
                     },
                     isHintVisible = currentItemState.isHintVisible,
                     singleLine = true,
-                    textStyle = MaterialTheme.typography.body1
+                    textStyle = MaterialTheme.typography.body1,
+                    onDoneClicked = {
+                        viewModel.onEvent(AddEditSingleListEvent.AddEntryToList)
+                    }
                 )
                 Row(horizontalArrangement = Arrangement.End) {
                     IconButton(
