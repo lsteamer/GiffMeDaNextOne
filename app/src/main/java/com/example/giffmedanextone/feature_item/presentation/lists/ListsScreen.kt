@@ -94,7 +94,7 @@ fun ListsScreen(
                 OrderSection(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp),
+                        .padding(vertical = 16.dp),
                     listOrder = state.listsOrder,
                     onOrderChange = {
                         viewModel.onEvent(ListsEvent.Order(it))

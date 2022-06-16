@@ -2,6 +2,7 @@ package com.example.giffmedanextone.feature_item.presentation.lists.components
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.RadioButton
@@ -31,7 +32,7 @@ fun DefaultRadioButton(
                 unselectedColor = MaterialTheme.colors.onBackground
             )
         )
-        Spacer(modifier = Modifier.width(8.dp))
+        Spacer(modifier = Modifier.width(1.dp))
         Text(text = text, style = MaterialTheme.typography.body1)
     }
 }

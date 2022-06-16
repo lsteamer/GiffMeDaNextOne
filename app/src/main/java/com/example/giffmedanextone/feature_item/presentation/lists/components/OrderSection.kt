@@ -24,13 +24,13 @@ fun OrderSection(
                 selected = listOrder is ListOrder.LastAccessed,
                 onSelect = { onOrderChange(ListOrder.LastAccessed(listOrder.orderType)) }
             )
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(4.dp))
             DefaultRadioButton(
                 text = stringResource(R.string.composable_radio_button_order_created),
                 selected = listOrder is ListOrder.Created,
                 onSelect = { onOrderChange(ListOrder.Created(listOrder.orderType)) }
             )
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(4.dp))
             DefaultRadioButton(
                 text = stringResource(R.string.composable_radio_button_order_color),
                 selected = listOrder is ListOrder.Color,
