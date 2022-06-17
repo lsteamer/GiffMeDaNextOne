@@ -2,6 +2,7 @@ package com.example.giffmedanextone.feature_item.presentation.add_edit_single_li
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActionScope
 import androidx.compose.foundation.text.KeyboardActions
@@ -15,6 +16,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.unit.dp
 
 
 @Composable
@@ -30,7 +32,7 @@ fun TransparentHintTextField(
     onDoneClicked: (KeyboardActionScope) -> Unit
 ) {
     Box(
-        modifier = modifier, contentAlignment = Alignment.CenterStart
+        modifier = modifier.padding(horizontal = 8.dp), contentAlignment = Alignment.CenterStart
     ) {
         BasicTextField(
             value = text,

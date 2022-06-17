@@ -1,9 +1,6 @@
 package com.example.giffmedanextone.feature_item.presentation.add_edit_single_list.components
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
@@ -32,7 +29,7 @@ fun SingleContent(
     contentText: String = "Item #1",
     color: Int = SingleList.listColors.random().toArgb(),
     onDeleteClicked: () -> Unit,
-    cornerRadius: Dp = 10.dp,
+    cornerRadius: Dp = 99.dp,
     elevation: Dp = 5.dp
 ) {
     Card(
@@ -46,6 +43,7 @@ fun SingleContent(
         Text(
             text = contentText,
             style = TextStyle(color = Color.Black, fontSize = 16.sp),
+            modifier = modifier.padding(vertical = 10.dp),
             textAlign = TextAlign.Center
         )
         Row(
