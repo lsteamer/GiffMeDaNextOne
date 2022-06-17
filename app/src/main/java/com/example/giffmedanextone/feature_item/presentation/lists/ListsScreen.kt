@@ -81,7 +81,7 @@ fun ListsScreen(
                 ) {
                     Icon(
                         imageVector = Icons.Default.Sort,
-                        contentDescription = "Sort"
+                        contentDescription = stringResource(id = R.string.button_sort)
                     )
                 }
 
