@@ -71,9 +71,9 @@ fun AddEditSingleListScreen(
                 AddEditSingleListViewModel.UIEvent.SaveCurrentList -> {
                     navController.navigateUp()
                 }
-                AddEditSingleListViewModel.UIEvent.ShowErrorSnackBar -> {
+                is AddEditSingleListViewModel.UIEvent.ShowErrorSnackBar -> {
                     scaffoldState.snackbarHostState.showSnackbar(
-                        message = errorMessage
+                        message = event.message ?: errorMessage
                     )
                 }
                 AddEditSingleListViewModel.UIEvent.AddEntryToList -> {

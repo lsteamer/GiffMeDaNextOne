@@ -121,7 +121,7 @@ class AddEditSingleListViewModel @Inject constructor(
                         _eventFlow.emit(UIEvent.SaveCurrentList)
                     } catch (e: InvalidListException) {
                         _eventFlow.emit(
-                            UIEvent.ShowErrorSnackBar
+                            UIEvent.ShowErrorSnackBar(e.message)
                         )
                     }
                 }
@@ -130,7 +130,7 @@ class AddEditSingleListViewModel @Inject constructor(
     }
 
     sealed class UIEvent {
-        object ShowErrorSnackBar : UIEvent()
+        data class ShowErrorSnackBar(val message: String? = null) : UIEvent()
         object SaveCurrentList : UIEvent()
         object AddEntryToList : UIEvent()
     }

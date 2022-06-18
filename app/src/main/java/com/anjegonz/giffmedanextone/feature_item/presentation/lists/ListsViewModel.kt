@@ -118,8 +118,6 @@ class ListsViewModel @Inject constructor(
 
     sealed class UIEvent {
         object ShowErrorSnackBar : UIEvent()
-        object GiffMeDaNextOne : UIEvent()
-        object AddEntryToList : UIEvent()
     }
 
 }

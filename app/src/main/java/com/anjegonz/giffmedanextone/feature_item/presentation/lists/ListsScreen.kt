@@ -39,8 +39,6 @@ fun ListsScreen(
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
-                ListsViewModel.UIEvent.AddEntryToList -> TODO()
-                ListsViewModel.UIEvent.GiffMeDaNextOne -> TODO()
                 ListsViewModel.UIEvent.ShowErrorSnackBar -> {
                     scaffoldState.snackbarHostState.showSnackbar(
                         message = errorMessage
