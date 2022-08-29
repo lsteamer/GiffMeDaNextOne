@@ -87,6 +87,9 @@ fun AddEditSingleListScreen(
     }
 
     Scaffold(
+        modifier = Modifier
+            .padding(top = 25.dp, bottom = 45.dp)
+            .imePadding(),
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { viewModel.onEvent(AddEditSingleListEvent.SaveList) },

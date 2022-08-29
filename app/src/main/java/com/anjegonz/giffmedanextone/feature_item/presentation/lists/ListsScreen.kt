@@ -53,16 +53,20 @@ fun ListsScreen(
         }
     }
 
-    Scaffold(floatingActionButton = {
-        FloatingActionButton(onClick = {
-            navController.navigate(Screen.AddEditSingleListScreen.route)
-        }, backgroundColor = MaterialTheme.colors.primary) {
-            Icon(
-                imageVector = Icons.Default.Add,
-                contentDescription = stringResource(R.string.button_add_description)
-            )
-        }
-    }, scaffoldState = scaffoldState) {
+    Scaffold(
+        modifier = Modifier
+            .padding(top = 25.dp, bottom = 45.dp),
+        floatingActionButton = {
+            FloatingActionButton(onClick = {
+                navController.navigate(Screen.AddEditSingleListScreen.route)
+            }, backgroundColor = MaterialTheme.colors.primary) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = stringResource(R.string.button_add_description)
+                )
+            }
+        }, scaffoldState = scaffoldState
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
