@@ -40,12 +40,15 @@ class AddEditSingleListViewModel @Inject constructor(
 
     private var currentNoteId: Int? = null
 
+    private var currentItem: String = ""
+
     init {
         savedStateHandle.get<Int>("listId")?.let { noteId ->
             if (noteId != -1) {
                 viewModelScope.launch {
                     listsUseCases.getSingleListUseCase(noteId)?.also { singleList ->
                         currentNoteId = singleList.id
+                        currentItem = singleList.currentItem
                         _listTitle.value = listTitle.value.copy(
                             text = singleList.title,
                             isHintVisible = false
@@ -109,7 +112,7 @@ class AddEditSingleListViewModel @Inject constructor(
                         listsUseCases.addListUseCase(
                             SingleList(
                                 title = listTitle.value.text,
-                                currentItem = "",
+                                currentItem = currentItem,
                                 bareList = currentList,
                                 accumulatingList = currentList,
                                 color = listColor.value,
