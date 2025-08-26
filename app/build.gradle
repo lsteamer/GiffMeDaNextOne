@@ -14,7 +14,7 @@ android {
     defaultConfig {
         applicationId "com.anjegonz.giffmedanextone"
         minSdk 30
-        targetSdk 33
+        targetSdk 36
         versionCode 7
         versionName "1.4.1"
 
